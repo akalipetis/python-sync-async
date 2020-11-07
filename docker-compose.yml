@@ -1,0 +1,18 @@
+services:
+  sync:
+    build: ./
+    environment:
+      - WEB_CONCURRENCY:${WEB_CONCURRENCY}
+    working_dir: /usr/src/app/sync
+    ports:
+      - 9090:8000
+    command: gunicorn -b 0.0.0.0:8000 --log-level=warning app:app
+
+  async:
+    build: ./
+    environment:
+      - WEB_CONCURRENCY:${WEB_CONCURRENCY}
+    working_dir: /usr/src/app/async
+    ports:
+      - 8080:8000
+    command: uvicorn --host 0.0.0.0 --port 8000 --log-level=warning app:app
